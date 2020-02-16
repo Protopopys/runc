@@ -1,0 +1,19 @@
+---
+# Вкл/Выкл использование downloader сервера (актуально если на удаленном хосте нет доступа к сети интернет или же количество хостов на которые необходимо доставить файлы
+use_downloader: true
+# Машина через которую осуществляется выкачивание файлов из сети интернет
+downloader: localhost
+# При использовании downloader в данную папку будет осуществлятся скачивание файлов, в дальнейшем распространение файлов на удаленные хосты осуществляется из данной папки downloader сервера.
+downloader_source_folder: ~/DISTR
+
+# Устаноавливаемая версия
+runc_version: v1.0.0-rc10
+# Папка на удаленном сервере куда будет осуществляться доставка архива с дальнейшей распаковкой
+runc_destination_path: "/opt/runc/{{ runc_version }}"
+
+runc:
+  v1.0.0-rc10:
+    source_url: https://github.com/opencontainers/runc/releases/download/v1.0.0-rc10/runc.amd64
+    # Контрольная сумма скачаемого архива
+    checksum_algorithm: "sha256"
+    checksum: a01afd5ff47d5a2a96bea3a871fb445b432f90c249a8a5d5239b05fe0d5bee4a

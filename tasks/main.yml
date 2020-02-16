@@ -1,0 +1,4 @@
+---
+# Импортируем задание развертывания
+- name: RUNC | Importing an installation task
+  import_tasks: "installing_runc.yml"
