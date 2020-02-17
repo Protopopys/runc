@@ -8,8 +8,8 @@ downloader_source_folder: ~/DISTR
 
 # Устаноавливаемая версия
 runc_version: v1.0.0-rc10
-# Папка на удаленном сервере куда будет осуществляться доставка архива с дальнейшей распаковкой
-runc_destination_path: "/opt/runc/{{ runc_version }}"
+# Папка на удаленном сервере куда будет осуществляться доставка файла
+bin_path: /usr/local/bin
 
 runc:
   v1.0.0-rc10:

@@ -2,19 +2,9 @@
 # Проверяем наличие бинарных файлов
 - name: RUNC | Check runc binary exists
   stat:
-    path: "{{ runc_destination_path }}/runc"
+    path: "{{ bin_path }}/runc"
     checksum_algorithm: "{{ runc[runc_version].checksum_algorithm }}"
   register: runc_bin
-
-# Создаем папки на удаленной машине
-- name: RUNC | Creating folder
-  file:
-    path: "{{ runc_destination_path }}"
-    state: directory
-    owner: root
-    group: root
-    mode: u+rwx
-  when: runc_bin.stat.checksum|default() != runc[runc_version].checksum
 
 # Блок заданий
 # Исполняется если:
@@ -58,7 +48,7 @@
       synchronize:
         checksum: true
         src: "{{ downloader_source_folder }}/{{ runc[runc_version].source_url | basename }}"
-        dest: "{{ runc_destination_path }}/runc"
+        dest: "{{ bin_path }}/runc"
       delegate_to: "{{ downloader }}"
       when: downloader != "localhost"
 
@@ -68,7 +58,7 @@
     - name: RUNC | Copy from {{ downloader }} to remote host
       copy:
         src: "{{ downloader_source_folder }}/{{ runc[runc_version].source_url | basename }}"
-        dest: "{{ runc_destination_path }}/runc"
+        dest: "{{ bin_path }}/runc"
         owner: root
         group: root
         mode: u+rwx
@@ -84,7 +74,7 @@
 - name: RUNC | Download etcd archive to host
   get_url:
     url: "{{ runc[runc_version].source_url }}"
-    dest: "{{ runc_destination_path }}/runc"
+    dest: "{{ bin_path }}/runc"
     checksum: "{{ runc[runc_version].checksum_algorithm }}:{{ runc[runc_version].checksum }}"
     owner: root
     group: root
