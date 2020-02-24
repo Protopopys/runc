@@ -19,7 +19,7 @@
         state: directory
         mode: u+rwx
       run_once: true
-      delegate_to: "{{ downloader }}"
+      delegate_to: localhost
 
     # Проверяем наличие файла на downloader сервере
     - name: RUNC | Check that the runc file exists on the {{ downloader }}
@@ -27,7 +27,7 @@
         path: "{{ downloader_source_folder }}/{{ runc[runc_version].source_url | basename }}"
         checksum_algorithm: "{{ runc[runc_version].checksum_algorithm }}"
       register: downloader_distr
-      delegate_to: "{{ downloader }}"
+      delegate_to: localhost
 
     # Выкачиваем файл напрямую из сети интернет
     # Если:
@@ -38,19 +38,8 @@
         dest: "{{ downloader_source_folder }}"
         checksum: "{{ runc[runc_version].checksum_algorithm }}:{{ runc[runc_version].checksum }}"
       run_once: true
-      delegate_to: "{{ downloader }}"
+      delegate_to: localhost
       when: downloader_distr.stat.checksum|default() != runc[runc_version].checksum
-
-    # Выполняем синхронизацию архива с удаленной машиной
-    # Если:
-    ## downloader сервером не является localhost (не та машина на которой осуществляется запуск playbook)
-    - name: RUNC | Copy from {{ downloader }} to remote host
-      synchronize:
-        checksum: true
-        src: "{{ downloader_source_folder }}/{{ runc[runc_version].source_url | basename }}"
-        dest: "{{ bin_path }}/runc"
-      delegate_to: "{{ downloader }}"
-      when: downloader != "localhost"
 
     # Выполняем копирование архива на удаленную машину
     # Если:
@@ -62,7 +51,6 @@
         owner: root
         group: root
         mode: u+rwx
-      when: downloader == "localhost"
   when:
     - use_downloader
     - runc_bin.stat.checksum|default() != runc[runc_version].checksum
