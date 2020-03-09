@@ -2,7 +2,7 @@
 # Проверяем наличие бинарных файлов
 - name: RUNC | Check runc binary exists
   stat:
-    path: "{{ bin_path }}/runc"
+    path: "{{ runc_bin_path }}/runc"
     checksum_algorithm: "{{ runc[runc_version].checksum_algorithm }}"
   register: runc_bin
 
@@ -47,7 +47,7 @@
     - name: RUNC | Copy from {{ downloader }} to remote host
       copy:
         src: "{{ downloader_source_folder }}/{{ runc[runc_version].source_url | basename }}"
-        dest: "{{ bin_path }}/runc"
+        dest: "{{ runc_bin_path }}/runc"
         owner: root
         group: root
         mode: u+rwx
@@ -62,7 +62,7 @@
 - name: RUNC | Download etcd archive to host
   get_url:
     url: "{{ runc[runc_version].source_url }}"
-    dest: "{{ bin_path }}/runc"
+    dest: "{{ runc_bin_path }}/runc"
     checksum: "{{ runc[runc_version].checksum_algorithm }}:{{ runc[runc_version].checksum }}"
     owner: root
     group: root
