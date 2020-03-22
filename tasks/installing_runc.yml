@@ -22,7 +22,7 @@
       delegate_to: localhost
 
     # Проверяем наличие файла на downloader сервере
-    - name: RUNC | Check that the runc file exists on the {{ downloader }}
+    - name: RUNC | Check that the runc file exists on the localhost
       stat:
         path: "{{ downloader_source_folder }}/{{ runc[runc_version].source_url | basename }}"
         checksum_algorithm: "{{ runc[runc_version].checksum_algorithm }}"
@@ -32,7 +32,7 @@
     # Выкачиваем файл напрямую из сети интернет
     # Если:
     ## Если файла нет на downloader сервере или Контрольная сумма файла не совпадает с указанной в переменной - runc[runc_version].checksum)
-    - name: RUNC | Download runc to {{ downloader }}
+    - name: RUNC | Download runc to localhost
       get_url:
         url: "{{ runc[runc_version].source_url }}"
         dest: "{{ downloader_source_folder }}"
@@ -44,7 +44,7 @@
     # Выполняем копирование архива на удаленную машину
     # Если:
     ## downloader сервером является localhost (машина на которой осуществляется запуск playbook)
-    - name: RUNC | Copy from {{ downloader }} to remote host
+    - name: RUNC | Copy from localhost to remote host
       copy:
         src: "{{ downloader_source_folder }}/{{ runc[runc_version].source_url | basename }}"
         dest: "{{ runc_bin_path }}/runc"
