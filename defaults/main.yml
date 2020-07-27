@@ -8,10 +8,15 @@ downloader_source_folder: ~/DISTR
 runc_bin_path: /usr/local/bin
 
 # Устаноавливаемая версия
-runc_version: v1.0.0-rc10
+runc_version: v1.0.0-rc91
 runc:
   v1.0.0-rc10:
     source_url: https://github.com/opencontainers/runc/releases/download/v1.0.0-rc10/runc.amd64
     # Контрольная сумма скачаемого архива
     checksum_algorithm: "sha256"
     checksum: a01afd5ff47d5a2a96bea3a871fb445b432f90c249a8a5d5239b05fe0d5bee4a
+  v1.0.0-rc91:
+    source_url: https://github.com/opencontainers/runc/releases/download/v1.0.0-rc91/runc.amd64
+    # Контрольная сумма скачаемого архива
+    checksum_algorithm: "sha256"
+    checksum: 4ee9cd05a24345d636c1d399595018269b422c43cda8f7a83198733be61f73d1

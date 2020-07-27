@@ -3,16 +3,26 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
-platforms:
-  - name: instance
-    image: centos:7
-provisioner:
-  name: ansible
-  lint:
-    name: ansible-lint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+platforms:
+  - name: Ubuntu16.04
+    image: protopopys/systemd-ubuntu:16.04
+
+  - name: Ubuntu18.04
+    image: protopopys/systemd-ubuntu:18.04
+
+  - name: Ubuntu20.04
+    image: protopopys/systemd-ubuntu:20.04
+
+  - name: Centos7
+    image: protopopys/systemd-centos:7
+
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
