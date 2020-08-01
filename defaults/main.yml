@@ -4,7 +4,7 @@ use_downloader: true
 # При использовании downloader в данную папку будет осуществлятся скачивание файлов, в дальнейшем распространение файлов на удаленные хосты осуществляется из данной папки downloader сервера.
 downloader_source_folder: ~/DISTR
 
-# Папка на удаленном сервере куда будет осуществляться доставка файла
+# Папка на удаленном сервере куда будет осуществляться доставка бинарного файла
 runc_bin_path: /usr/local/bin
 
 # Устаноавливаемая версия
@@ -19,4 +19,4 @@ runc:
     source_url: https://github.com/opencontainers/runc/releases/download/v1.0.0-rc91/runc.amd64
     # Контрольная сумма скачаемого архива
     checksum_algorithm: "sha256"
-    checksum: 4ee9cd05a24345d636c1d399595018269b422c43cda8f7a83198733be61f73d1
+    checksum: c1c30e250ba1af1bc513a37a85aef8c7824e9b8e76d10c933add58a72d84fce6
