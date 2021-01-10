@@ -1,18 +1,12 @@
 ---
-# Проверяем наличие бинарных файлов
 - name: RUNC | Check runc binary exists
   stat:
     path: "{{ runc_bin_path }}/runc"
     checksum_algorithm: "{{ runc[runc_version].checksum_algorithm }}"
   register: runc_bin
 
-# Блок заданий
-# Исполняется если:
-## Использвание downloader сервера включено - use_downloader=true и
-## Файла нет на удаленном сервере или Контрольная сумма файла не совпадает с указанной в переменной - runc[runc_version].checksum
 - name: RUNC |(when use_downloader == TRUE)
   block:
-    # Создаем папку на downloader сервере (в данную папку будет осуществляться скачивание файла из сети интернет)
     - name: RUNC | Creating default folder for components
       file:
         path: "{{ downloader_source_folder }}"
@@ -21,7 +15,6 @@
       run_once: true
       delegate_to: localhost
 
-    # Проверяем наличие файла на downloader сервере
     - name: RUNC | Check that the runc file exists on the localhost
       stat:
         path: "{{ downloader_source_folder }}/{{ runc[runc_version].source_url | basename }}"
@@ -29,9 +22,6 @@
       register: downloader_distr
       delegate_to: localhost
 
-    # Выкачиваем файл напрямую из сети интернет
-    # Если:
-    ## Если файла нет на downloader сервере или Контрольная сумма файла не совпадает с указанной в переменной - runc[runc_version].checksum)
     - name: RUNC | Download runc to localhost
       get_url:
         url: "{{ runc[runc_version].source_url }}"
@@ -41,9 +31,6 @@
       delegate_to: localhost
       when: downloader_distr.stat.checksum|default() != runc[runc_version].checksum
 
-    # Выполняем копирование архива на удаленную машину
-    # Если:
-    ## downloader сервером является localhost (машина на которой осуществляется запуск playbook)
     - name: RUNC | Copy from localhost to remote host
       copy:
         src: "{{ downloader_source_folder }}/{{ runc[runc_version].source_url | basename }}"
@@ -55,10 +42,6 @@
     - use_downloader
     - runc_bin.stat.checksum|default() != runc[runc_version].checksum
 
-# Выкачиваем архив напрямую из сети интернет
-# Если:
-## Использвание downloader сервера отключено: use_downloader=false и
-## Архива нет на удаленном сервере или Контрольная сумма архива не совпадает с указанной в переменной - runc[runc_version].archive_checksum)
 - name: RUNC | Download etcd archive to host
   get_url:
     url: "{{ runc[runc_version].source_url }}"
